@@ -24,7 +24,7 @@ int main()
             printf("\n2");
             break;
         case 3:
-            printf("\n3");
+            optionDates();
             break;
         case 4:
             printf("\nSee you, bye bye");
