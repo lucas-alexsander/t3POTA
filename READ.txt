@@ -1,0 +1,5 @@
+**********************
+Para executar a opção de ler os números do arquivo:
+- Informar a quantidade exata de números que serão lidos
+- Os números devem estar separados por quebra de linha (somente)
+- O arquivo tem que ter o seguinte nome "numeros.txt" e estar no mesmo diretório
