@@ -113,17 +113,8 @@ void inputDates(Dates *datas)
         dataNova.year = ano;
         setDate(datas, dataNova, i);        
     }
-    printf("[ ");
-    for(int i = 0; i < datas->quantidade; i++){
-        
-        Date date = getDate(datas, i);
-        printStringDate(&date);
-        if(i != datas->quantidade-1){
-            printf(", ");
-        }
-        
-    }
-    printf(" ]");
+    printf("DATAS INFORMADAS: ");
+    printDatas(datas);
 
     subMenuDates(datas);
     
@@ -158,16 +149,11 @@ void selectSortDates(Dates* listaDatas)
         Date dateMin = getDate(listaDatas, i);
         for(j = i+1; j < listaDatas->quantidade; j++)
         {
-            Date dateAtual = getDate(&listaDatas, j);
+            Date dateAtual = getDate(listaDatas, j);
             //SE A DATA ATUAL FOR MENOR QUE A DATA MENOR
-            printf("\nComparar: ");
-            printStringDate(&dateMin);
-            printf(" e ");
-            printStringDate(&dateAtual);
             if(compareDates(&dateMin, &dateAtual) == -1){
-                menor = i;
+                menor = j;
                 dateMin = dateAtual;
-                printf("\nMenor");
             }
         }
         //TROCAR POSICAO MENOR SE FOR DIFERENTE DE I
@@ -175,13 +161,10 @@ void selectSortDates(Dates* listaDatas)
             Date dateAux = getDate(listaDatas, i);
             setDate(listaDatas, dateMin, i);
             setDate(listaDatas, dateAux, menor);
-            printf("\nTROCAR: ");
-            printStringDate(&dateMin);
-            printf(" e ");
-            printStringDate(&dateAux);
         }
     }
 
+    printf("\nDATAS ORDENADAS: ");
     printDatas(listaDatas);
 }
 
@@ -280,7 +263,7 @@ void optionDates()
             randomDates(datas);
             break;
         case 2:
-            getFromFile(datas);
+            getDatesFromFile(datas);
             break;
         case 3:
             inputDates(datas);
