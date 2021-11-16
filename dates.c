@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <time.h>
 
 //Struct para armazenamento dos dados de uma Data
 struct date
@@ -72,8 +72,26 @@ int compareDates(Date *date1, Date *date2)
 //Função que irá gerar aleatoriamente datas
 void randomDates(Dates *datas)
 {
-    printf("\nAINDA NAO IMPLEMENTADO");
+    //srand(time(NULL));
+    
+    for(int i = 0; i < datas->quantidade; i++){
+        
+        int dia = rand() % 30;
+        int mes = rand() % 12;
+        int ano = rand() % 2021;
+
+        Date data;
+        data.day = dia;
+        data.month = mes;
+        data.year = ano;
+
+        datas->datas[i] = data;
+
+    }
     printf("\nrandomNumbers");
+    printDatas(datas);
+
+    subMenuDates(datas);
 }
 
 //Função que receberá datas de um arquivo
@@ -86,11 +104,7 @@ void getDatesFromFile(Dates *datas)
 //Função que receberá do usuário datas a serem armazenados em memória
 void inputDates(Dates *datas)
 {
-    int qtdDatas;
 
-    printf("\nInforme a quantidade de datas: ");
-    scanf("%d", &qtdDatas);
-    datas->quantidade = qtdDatas;
 
     printf("\ninputDates");
     for(int i = 0; i < datas->quantidade; i++){
@@ -131,7 +145,7 @@ void printDatas(Dates* listaDatas)
             printStringDate(&listaDatas->datas[i]);
         }
         else{
-            printf(" ,");
+            printf(", ");
             printStringDate(&listaDatas->datas[i]);
         }
     }
@@ -168,43 +182,71 @@ void selectSortDates(Dates* listaDatas)
     printDatas(listaDatas);
 }
 
-//SELECTION SORT O(N²)
-void ordenaVetor(int* vetor, int inicio, int atual, int final, int menor){
-    if(inicio >= final){
-        return;
-    }
-    else if(vetor[menor] > vetor[atual] && atual < final){
-        menor = atual;
-        atual +=1;
-        ordenaVetor(vetor,  inicio, atual, final, menor);
-    }
-    else if(atual >= final){
-        int aux = vetor[inicio];
-        vetor[inicio] = vetor[menor];
-        vetor[menor] = aux;
-        inicio+=1;
-        atual = inicio +1;
-        menor = inicio;
-        ordenaVetor(vetor,  inicio, atual, final, menor);
-    }
-    else{
-        atual +=1;
-        ordenaVetor(vetor, inicio, atual, final, menor);
-    }
-}
-
-//insertionSortDates(Dates* listaDatas)
-void insertionSortDates(Dates* listaDatas)
-{
-    printf("\nAINDA NAO IMPLEMENTADO");
-    printf("\ninsertionSortDates(Dates* listaDatas)");
+//Metodo de ordenacao insert Sort
+void insertionSortDates(Dates* listaDatas) {
+	int i, j, aux, comp = 0, mov = 0;
+    Date date_aux;
+	Dates* listaDatasNova;//int vetor[n];    
+	listaDatasNova->quantidade = listaDatas->quantidade;
+	for (i = 0; i < listaDatas->quantidade; i++){
+		listaDatasNova->datas[i] = listaDatas->datas[i];
+	}
+	
+	clock_t begin = clock(); 
+  	for (i = 1; i < listaDatas->quantidade; i++) {
+    	j = i;
+        while (j > 0 && compareDates(&listaDatasNova->datas[j - 1], &listaDatasNova->datas[j]) == -1) {
+              date_aux = listaDatasNova->datas[j];
+              listaDatasNova->datas[j] = listaDatasNova->datas[j - 1];
+              listaDatasNova->datas[j - 1] = date_aux;
+              j--;
+              comp++;
+              mov++;
+        }  	
+	}
+	clock_t end = clock();
+	double time_spent = (double)(end - begin)/CLOCKS_PER_SEC;
+	printf("\n\nNumeros ordenados atraves do metodo insert sort:\n");
+    listaDatas = listaDatasNova;
+    printDatas(listaDatas);
+    printf("\nForam feitas %d comparacoes e %d movimentacoes no tempo de: %f", comp, mov, time_spent);
 }
 
 //bubbleSortDates(Dates* listaDatas)
 void bubbleSortDates(Dates* listaDatas)
 {
-    printf("\nAINDA NAO IMPLEMENTADO");
     printf("\nbubbleSortDates(Dates* listaDatas)");
+
+        int i, j, aux, mov = 0, comp = 0;
+    Date date_aux;
+	Dates* novaLista;//int vetor[n];    
+    novaLista->quantidade = listaDatas->quantidade;
+    
+	for (i = 0; i < listaDatas->quantidade; i++){
+		novaLista->datas[i] = listaDatas->datas[i];
+	}
+    
+    clock_t begin = clock();
+	for (i = 1; i < listaDatas->quantidade; i++) {
+        
+        for (j = 0; j < listaDatas->quantidade - 1; j++) {
+            
+            comp++;
+            if (compareDates(&novaLista->datas[j], &novaLista->datas[j+1]) == -1) {
+                date_aux          = novaLista->datas[j];
+                novaLista->datas[j]     = novaLista->datas[j + 1];
+                novaLista->datas[j + 1] = date_aux;
+                mov++;
+            }
+        }
+    }
+    clock_t end = clock();
+    double time_spent = (double)(end - begin)/CLOCKS_PER_SEC;
+    printf("\nDatas ordenadas atraves do metodo bubble sort:\n");
+    listaDatas = novaLista;
+    printDatas(listaDatas);
+    printf("\nForam feitas %d comparacoes e %d movimentacoes no tempo de: %f", comp, mov, time_spent);
+
 }
 
 //MENU BUSCAS
@@ -247,15 +289,21 @@ void optionDates()
 {
     Dates *datas = (Dates*)malloc(sizeof(Dates));
 
-    int option, optionOK;
+
+    int qtdDatas;
+
+    printf("\nInforme a quantidade de datas: ");
+    scanf("%d", &qtdDatas);
+    datas->quantidade = qtdDatas;
+    
+    int option;
     while (1 == 1)
     {
         printf("\n---------------------");
         printf("\nEscolha uma das opcoes:");
         printf("\n1 - Gerar Datas Aleatorios");
-        printf("\n2 - Ler Datas do arquivo");
-        printf("\n3 - Receber Datas manualmente");
-        printf("\n4 - Retornar ao menu principal\n");
+        printf("\n2 - Receber Datas manualmente");
+        printf("\n3 - Retornar ao menu principal\n");
         scanf("%d", &option);
         switch (option)
         {
@@ -263,21 +311,13 @@ void optionDates()
             randomDates(datas);
             break;
         case 2:
-            getDatesFromFile(datas);
-            break;
-        case 3:
             inputDates(datas);
             break;
-        case 4:
+        case 3:
             return;
         default:
             printf("Informe um numero valido entre 1 e 3");
             break;
-        }
-
-        if (optionOK == 1)
-        {
-            subMenuDates(datas);
         }
     }
     return;
