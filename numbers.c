@@ -182,7 +182,7 @@ void optionNumbers(){
         printf("\nEscolha uma das opcoes:");
         printf("\n1 - Gerar Numeros Aleatorios");
         printf("\n2 - Ler numeros do arquivo");
-        printf("\n3 - Receber numeros manualmente");
+        printf("\n3 - Inserir numeros manualmente");
         printf("\n4 - Retornar ao menu principal\n");
         scanf("%d", &option);
         switch (option)
@@ -208,7 +208,7 @@ void optionNumbers(){
         case 4:
             return;         
         default:
-            printf("Informe um numero valido entre 1 e 3");
+            printf("Informe um numero valido entre 1 e 4");
             break;
         }
     }

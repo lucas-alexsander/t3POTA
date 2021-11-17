@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "dates.c"
 #include "numbers.c"
+#include "strings.c"
 
 int main()
 {
@@ -21,7 +22,7 @@ int main()
             optionNumbers();
             break;
         case 2:
-            printf("\n2");
+            optionStrings();
             break;
         case 3:
             optionDates();
